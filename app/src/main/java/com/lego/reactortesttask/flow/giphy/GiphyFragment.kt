@@ -5,11 +5,11 @@ import android.view.View
 import com.lego.reactortesttask.R
 import com.lego.reactortesttask.base.BaseFragment
 import com.lego.reactortesttask.utils.onQueryChanged
-import com.lego.reactortesttask.utils.showKeyboardEx
+import com.lego.reactortesttask.databinding.*
 import kotlinx.android.synthetic.main.fragment_giphy.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
-class GiphyFragment : BaseFragment() {
+class GiphyFragment : BaseFragment<FragmentGiphyBinding>() {
 
     companion object {
         const val TAG = "GiphyFragment"
@@ -17,15 +17,16 @@ class GiphyFragment : BaseFragment() {
 
     override val viewModel: GiphyViewModel by viewModel()
     override fun getLayout(): Int = R.layout.fragment_giphy
-    val adapter = GiphyAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.showKeyboardEx(searchView)
 
+        binding.viewModel = viewModel
+        binding.executePendingBindings()
+        searchView.queryHint = getString(R.string.query_hint)
         searchView.onQueryChanged {
             viewModel.search(it)
         }
-        recyclerView.adapter = adapter
+        searchView.onActionViewExpanded()
     }
 }

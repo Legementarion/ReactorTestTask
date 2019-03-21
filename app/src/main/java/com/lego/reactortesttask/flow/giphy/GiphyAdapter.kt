@@ -6,6 +6,8 @@ import com.lego.reactortesttask.R
 import com.lego.reactortesttask.base.BaseListAdapter
 import com.lego.reactortesttask.base.BaseViewHolder
 import com.lego.reactortesttask.domain.entity.GiphyEntity
+import com.lego.reactortesttask.utils.GIF_SIZE
+import com.lego.reactortesttask.utils.GIF_URL
 import com.lego.reactortesttask.utils.inflate
 import com.lego.reactortesttask.utils.setGif
 import kotlinx.android.extensions.LayoutContainer
@@ -21,7 +23,7 @@ class GiphyAdapter : BaseListAdapter<GiphyEntity, BaseViewHolder<GiphyEntity>>()
         LayoutContainer {
 
         override fun bind(model: GiphyEntity) {
-            gifContent.setGif(model.slug)
+            gifContent.setGif(GIF_URL + model.gif + GIF_SIZE)
         }
 
     }

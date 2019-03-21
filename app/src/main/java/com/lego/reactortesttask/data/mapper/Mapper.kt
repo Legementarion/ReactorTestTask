@@ -6,7 +6,7 @@ import com.lego.reactortesttask.domain.entity.GiphyEntity
 fun GiphyResponse.toDomain(): List<GiphyEntity> {
     val list = mutableListOf<GiphyEntity>()
     gifObjects.forEach {
-        list.add(GiphyEntity(it.gif))
+        list.add(GiphyEntity(it.id))
     }
     return list
 }

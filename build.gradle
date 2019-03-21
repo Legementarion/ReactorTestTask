@@ -7,7 +7,7 @@ buildscript {
         okhttp = '3.10.0'
         rxjava2 = '2.1.12'
         rxandroid = '2.1.0'
-        glide_version = '4.8.0'
+        glide_version = '4.9.0'
         recycler_version = "1.0.0"
         koin = "1.0.2"
         rxkotlin = "2.3.0"

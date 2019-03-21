@@ -5,6 +5,7 @@ import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import com.lego.reactortesttask.base.BaseViewModel
 import com.lego.reactortesttask.domain.usecase.SearchGifsUseCase
+import com.lego.reactortesttask.utils.Paginator
 import com.lego.reactortesttask.utils.defaultSchedulers
 import io.reactivex.rxkotlin.addTo
 import io.reactivex.rxkotlin.subscribeBy
@@ -19,11 +20,12 @@ class GiphyViewModel(application: Application, private val searchGifsUseCase: Se
         set(false)
     }
     val isEmptyState = ObservableBoolean()
-    var currentQuery: String? = null
-    var offset: Int = 0
     var errorDelegate: ((error: String) -> Unit)? = null
+    private var currentQuery: String? = null
+    private var offset: Int = 0
+    private var totalCount: Int = 0
 
-    fun search(query: String) {
+    fun search(query: String, paginator: Paginator?) {
         offset = 0
         currentQuery = query
         searchGifsUseCase
@@ -35,18 +37,21 @@ class GiphyViewModel(application: Application, private val searchGifsUseCase: Se
             .subscribeBy(
                 onSuccess = {
                     isLoading.set(false)
-                    isEmptyState.set(it.isEmpty())
-                    adapter.get()?.setItems(it)
-                    offset += it.size
+                    paginator?.loaded()
+                    isEmptyState.set(it.first.isEmpty())
+                    adapter.get()?.setItems(it.first)
+                    offset += it.first.size
+                    totalCount = it.second
                 },
                 onError = {
                     isLoading.set(false)
+                    paginator?.loaded()
                     errorDelegate?.invoke(it.localizedMessage)
                 }
             ).addTo(compositeDisposable)
     }
 
-    fun uploadMore() {
+    fun uploadMore(paginator: Paginator?) {
         currentQuery?.let { query ->
             searchGifsUseCase
                 .search(query, offset)
@@ -57,11 +62,16 @@ class GiphyViewModel(application: Application, private val searchGifsUseCase: Se
                 .subscribeBy(
                     onSuccess = {
                         isLoading.set(false)
-                        adapter.get()?.addItems(it)
-                        offset += it.size
+                        paginator?.loaded()
+                        adapter.get()?.addItems(it.first)
+                        offset += it.first.size
+                        if (offset >= totalCount) {
+                            paginator?.complete()
+                        }
                     },
                     onError = {
                         isLoading.set(false)
+                        paginator?.loaded()
                         errorDelegate?.invoke(it.localizedMessage)
                     }
                 ).addTo(compositeDisposable)

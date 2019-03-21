@@ -5,6 +5,6 @@ import io.reactivex.Single
 
 interface GiphyRepository {
 
-    fun search(query: String, offset: Int): Single<List<GiphyEntity>>
+    fun search(query: String, offset: Int): Single<Pair<List<GiphyEntity>, Int>>
 
 }

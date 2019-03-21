@@ -8,7 +8,7 @@ import io.reactivex.Single
 
 class GiphyDataRepository(private val remoteDataSource: GiphyRemoteDataSource) : GiphyRepository {
 
-    override fun search(query: String, offset: Int): Single<List<GiphyEntity>> =
+    override fun search(query: String, offset: Int): Single<Pair<List<GiphyEntity>, Int>> =
         remoteDataSource.search(query, offset)
             .map { it.toDomain() }
 

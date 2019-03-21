@@ -28,5 +28,8 @@ class GiphyFragment : BaseFragment<FragmentGiphyBinding>() {
             viewModel.search(it)
         }
         searchView.onActionViewExpanded()
+        viewModel.errorDelegate = {
+            toast(it)
+        }
     }
 }

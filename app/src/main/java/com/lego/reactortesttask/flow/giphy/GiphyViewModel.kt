@@ -1,7 +1,6 @@
 package com.lego.reactortesttask.flow.giphy
 
 import android.app.Application
-import android.util.Log
 import androidx.databinding.ObservableBoolean
 import androidx.databinding.ObservableField
 import com.lego.reactortesttask.base.BaseViewModel
@@ -22,6 +21,7 @@ class GiphyViewModel(application: Application, private val searchGifsUseCase: Se
     val isEmptyState = ObservableBoolean()
     var currentQuery: String? = null
     var offset: Int = 0
+    var errorDelegate: ((error: String) -> Unit)? = null
 
     fun search(query: String) {
         offset = 0
@@ -41,7 +41,7 @@ class GiphyViewModel(application: Application, private val searchGifsUseCase: Se
                 },
                 onError = {
                     isLoading.set(false)
-                    Log.e(it.javaClass.name, it.localizedMessage)
+                    errorDelegate?.invoke(it.localizedMessage)
                 }
             ).addTo(compositeDisposable)
     }
@@ -62,7 +62,7 @@ class GiphyViewModel(application: Application, private val searchGifsUseCase: Se
                     },
                     onError = {
                         isLoading.set(false)
-                        Log.e(it.javaClass.name, it.localizedMessage)
+                        errorDelegate?.invoke(it.localizedMessage)
                     }
                 ).addTo(compositeDisposable)
         }

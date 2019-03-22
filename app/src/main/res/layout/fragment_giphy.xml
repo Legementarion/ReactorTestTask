@@ -20,7 +20,7 @@
         <View
             android:id="@+id/view"
             android:layout_width="wrap_content"
-            android:layout_height="56dp"
+            android:layout_height="@dimen/search_view_height"
             android:background="@drawable/ic_launcher_background"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -71,7 +71,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/empty_state"
-            android:textSize="24sp"
+            android:textSize="@dimen/empty_state_font_size"
             android:visibility="@{viewModel.isEmptyState?View.VISIBLE:View.GONE}"
             app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
             app:layout_constraintEnd_toEndOf="parent"
